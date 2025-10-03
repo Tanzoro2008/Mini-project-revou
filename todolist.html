@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To Do List (To-Do List) </title>
+    <style>
+        
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1e1e1e; 
+            color: #f0f0f0; 
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; 
+            min-height: 100vh;
+            padding: 20px;
+            margin: 0;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 600px;
+            background-color: #2c2c2c; 
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); 
+        }
+
+        h1 {
+            color: #7affff; 
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        #taskInput {
+            flex-grow: 1;
+            padding: 12px;
+            border: 1px solid #444;
+            border-radius: 4px;
+            background-color: #383838; 
+            color: #f0f0f0;
+            outline: none;
+        }
+
+        #taskInput:focus {
+            border-color: #7affff; 
+        }
+
+        button {
+            padding: 12px 15px;
+            border: none;
+            border-radius: 4px;
+            background-color: #007bff; 
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        
+        #taskListTable {
+            width: 100%;
+            border-collapse: collapse; 
+            margin-top: 20px;
+            background-color: #333; 
+            border-radius: 4px;
+            overflow: hidden; 
+        }
+
+        #taskListTable th, #taskListTable td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #444; 
+        }
+
+        #taskListTable th {
+            background-color: #4a4a4a; 
+            color: #7affff;
+            font-weight: bold;
+        }
+
+        #taskListTable tr:last-child td {
+            border-bottom: none; 
+        }
+
+        #taskListTable tr:hover {
+            background-color: #3e3e3e; 
+        }
+
+        
+        .action-btn {
+            padding: 6px 10px;
+            margin: 0 5px;
+            font-size: 0.9em;
+        }
+
+        .delete-btn {
+            background-color: #dc3545; 
+        }
+
+        .delete-btn:hover {
+            background-color: #c82333;
+        }
+
+        .complete-btn {
+            background-color: #28a745; 
+        }
+
+        .complete-btn:hover {
+            background-color: #1e7e34;
+        }
+
+        
+        .completed {
+            text-decoration: line-through; 
+            color: #888; 
+            font-style: italic;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Daftar Tugas 🌙</h1>
+
+        <div class="input-group">
+            <input type="text" id="taskInput" placeholder="Masukkan tugas baru...">
+            <button onclick="addTask()">Tambah Tugas</button>
+        </div>
+
+        <table id="taskListTable">
+            <thead>
+                <tr>
+                    <th>Tugas</th>
+                    <th style="width: 150px;">Aksi</th>
+                </tr>
+            </thead>
+            <tbody id="taskListBody">
+                </tbody>
+        </table>
+    </div>
+
+    <script>
+        
+        
+        
+        function addTask() {
+            const taskInput = document.getElementById('taskInput');
+            const taskText = taskInput.value.trim();
+
+            if (taskText === "") {
+                alert("Tugas tidak boleh kosong!");
+                return;
+            }
+
+            const taskListBody = document.getElementById('taskListBody');
+            
+            
+            const newRow = taskListBody.insertRow();
+            
+            
+            const taskCell = newRow.insertCell(0);
+            taskCell.textContent = taskText;
+            
+            
+            const actionCell = newRow.insertCell(1);
+
+            
+            const completeButton = document.createElement('button');
+            completeButton.textContent = 'Selesai';
+            completeButton.className = 'action-btn complete-btn';
+            completeButton.onclick = function() {
+                toggleComplete(taskCell, completeButton);
+            };
+            
+            
+            const deleteButton = document.createElement('button');
+            deleteButton.textContent = 'Hapus';
+            deleteButton.className = 'action-btn delete-btn';
+            deleteButton.onclick = function() {
+                deleteTask(newRow);
+            };
+            
+            actionCell.appendChild(completeButton);
+            actionCell.appendChild(deleteButton);
+            
+            
+            taskInput.value = '';
+        }
+
+        
+        function toggleComplete(taskCell, completeButton) {
+            if (taskCell.classList.contains('completed')) {
+                
+                taskCell.classList.remove('completed');
+                completeButton.textContent = 'Selesai';
+                completeButton.style.backgroundColor = '#28a745';
+            } else {
+                
+                taskCell.classList.add('completed');
+                completeButton.textContent = 'Batal'; 
+                completeButton.style.backgroundColor = '#6c757d'; 
+            }
+        }
+
+        
+        function deleteTask(row) {
+            row.remove();
+        }
+        
+        
+        document.getElementById('taskInput').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                addTask();
+            }
+        });
+        
+    </script>
+
+</body>
+</html>
